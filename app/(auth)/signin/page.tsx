@@ -19,27 +19,25 @@ export default function SignInPage() {
 
     console.log("signin form data:", result)
 
-    // signin 
+    // signin
     const { data, error } = await signIn.email({
-    email: result.email as string,
-    password: result.password as string,
-    rememberMe: true, // If false, the user will be signed out when the browser is closed. (optional) (default: true)
-    callbackURL: "/", 
-    });
+      email: result.email as string,
+      password: result.password as string,
+      rememberMe: true, // If false, the user will be signed out when the browser is closed. (optional) (default: true)
+      callbackURL: "/",
+    })
 
     if (error) {
-        alert("Error signing in: " + error.message);
+      alert("Error signing in: " + error.message)
       console.error("Error signing in:", error)
       // Handle the error (e.g., show an error message to the user)
     } else {
-       alert("Successfully signed in!");
+      alert("Successfully signed in!")
       console.log("Successfully signed in:", data)
       // Handle successful sign-in (e.g., redirect the user)
     }
 
-   console.log("signin result:", { data, error });
-
-
+    console.log("signin result:", { data, error })
   }
 
   return (
@@ -133,7 +131,7 @@ export default function SignInPage() {
 
             <Button
               type="submit"
-              className="h-12 w-full rounded-xl bg-[#5c53fe] text-base text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
+              className="cursor-pointer h-12 w-full rounded-xl bg-[#5c53fe] text-base text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
             >
               Sign In
             </Button>
