@@ -57,7 +57,7 @@ export function JobSeekersStats() {
             // Figma card: 312 x 254, radius 16, 1px white/10, dark gradient, 24px padding
             <li
               key={stat.label}
-              className="flex flex-col gap-[72px] rounded-2xl border border-white/10 p-6 [background-image:linear-gradient(180deg,#010102_12%,#1b1b1b_100%)]"
+              className="flex flex-col gap-[72px] rounded-2xl border border-white/10 [background-image:linear-gradient(180deg,#010102_12%,#1b1b1b_100%)] p-6"
             >
               {stat.icon}
               <div className="flex flex-col gap-4">

@@ -6,18 +6,28 @@ import { Eye, EyeOff } from "lucide-react"
 import { FormEvent, useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { signUp } from "@/lib/auth-client"
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-    const formData = new FormData(event.currentTarget)
-    const data = Object.fromEntries(formData.entries())
+    const formData = new FormData(e.currentTarget)
+    const result = Object.fromEntries(formData.entries())
 
-    console.log("signup form data:", data)
+    console.log("signup form data:", result)
+
+    // database 
+    const { data, error } = await signUp.email({
+    name: result.name as string,
+    email: result.email as string,
+    password: result.password as string,
+    });
+    console.log("signup result:", { data, error });
+
   }
 
   return (
