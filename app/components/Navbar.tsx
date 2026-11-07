@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { useSession, signOut } from "@/lib/auth-client"
 
 const navigation = [
   { label: "Browse Jobs", href: "#jobs" },
@@ -33,6 +34,7 @@ function NavigationLinks({ onNavigate }: { onNavigate?: () => void }) {
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLElement>(null)
+  const { data: session } = useSession()
 
   function closeMenu() {
     setIsMenuOpen(false)
@@ -64,6 +66,15 @@ export function Navbar() {
       document.removeEventListener("keydown", handleEscape)
     }
   }, [])
+
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+      closeMenu()
+    } catch (error) {
+      console.error("Error signing out:", error)
+    }
+  }
 
   return (
     <header
@@ -100,22 +111,39 @@ export function Navbar() {
           <span className="h-6 w-px bg-[#a8a8a8]" aria-hidden="true" />
 
           <div className="flex items-center gap-4">
-            <Button
-              nativeButton={false}
-              render={<Link href="/signin" />}
-              variant="ghost"
-              className="h-auto rounded-xl px-6 py-2 font-[family-name:var(--font-manrope)] text-lg leading-[1.45] font-semibold text-[#5c53fe] hover:bg-white/5 hover:text-[#7a73ff]"
-            >
-              Sign In
-            </Button>
+            {session?.user ? (
+              <>
+              <span className="max-w-48 truncate px-3 font-[family-name:var(--font-manrope)] text-lg font-semibold text-white">
+                {session.user.name}
+              </span>
+              <Button
+                onClick={handleSignOut}
+                  nativeButton={false}
+                  className="cursor-pointer h-10 rounded-xl border border-[#090a15]/10 bg-[#5c53fe] px-[22.5px] font-[family-name:var(--font-instrument-sans)] text-lg leading-[1.45] font-medium text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
+                >
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  nativeButton={false}
+                  render={<Link href="/signin" />}
+                  variant="ghost"
+                  className="h-auto rounded-xl px-6 py-2 font-[family-name:var(--font-manrope)] text-lg leading-[1.45] font-semibold text-[#5c53fe] hover:bg-white/5 hover:text-[#7a73ff]"
+                >
+                  Sign In
+                </Button>
 
-            <Button
-              nativeButton={false}
-              render={<Link href="/signup" />}
-              className="h-10 rounded-xl border border-[#090a15]/10 bg-[#5c53fe] px-[22.5px] font-[family-name:var(--font-instrument-sans)] text-lg leading-[1.45] font-medium text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
-            >
-              Get Started
-            </Button>
+                <Button
+                  nativeButton={false}
+                  render={<Link href="/signup" />}
+                  className="h-10 rounded-xl border border-[#090a15]/10 bg-[#5c53fe] px-[22.5px] font-[family-name:var(--font-instrument-sans)] text-lg leading-[1.45] font-medium text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
+                >
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
@@ -146,22 +174,30 @@ export function Navbar() {
 
             {/* Auth Buttons */}
             <div className="flex flex-col gap-3 border-t border-white/10 pt-5 sm:flex-row">
-              <Button
-                nativeButton={false}
-                render={<Link href="/signin" onClick={closeMenu} />}
-                variant="ghost"
-                className="h-10 justify-start rounded-xl px-0 font-[family-name:var(--font-manrope)] text-lg font-semibold text-[#5c53fe] hover:bg-white/5 hover:text-[#7a73ff] sm:justify-center sm:px-6"
-              >
-                Sign In
-              </Button>
+              {session?.user ? (
+                <span className="px-0 font-[family-name:var(--font-manrope)] text-lg font-semibold text-white">
+                  {session.user.name}
+                </span>
+              ) : (
+                <>
+                  <Button
+                    nativeButton={false}
+                    render={<Link href="/signin" onClick={closeMenu} />}
+                    variant="ghost"
+                    className="h-10 justify-start rounded-xl px-0 font-[family-name:var(--font-manrope)] text-lg font-semibold text-[#5c53fe] hover:bg-white/5 hover:text-[#7a73ff] sm:justify-center sm:px-6"
+                  >
+                    Sign In
+                  </Button>
 
-              <Button
-                nativeButton={false}
-                render={<Link href="/signup" onClick={closeMenu} />}
-                className="h-10 rounded-xl bg-[#5c53fe] px-6 font-[family-name:var(--font-instrument-sans)] text-lg font-medium text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
-              >
-                Get Started
-              </Button>
+                  <Button
+                    nativeButton={false}
+                    render={<Link href="/signup" onClick={closeMenu} />}
+                    className="h-10 rounded-xl bg-[#5c53fe] px-6 font-[family-name:var(--font-instrument-sans)] text-lg font-medium text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
+                  >
+                    Get Started
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -131,7 +131,7 @@ export default function SignInPage() {
 
             <Button
               type="submit"
-              className="cursor-pointer h-12 w-full rounded-xl bg-[#5c53fe] text-base text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
+              className="h-12 w-full cursor-pointer rounded-xl bg-[#5c53fe] text-base text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
             >
               Sign In
             </Button>
