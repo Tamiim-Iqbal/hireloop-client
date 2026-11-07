@@ -25,8 +25,20 @@ export default function SignUpPage() {
     name: result.name as string,
     email: result.email as string,
     password: result.password as string,
+    callbackURL: "/signin",
     });
     console.log("signup result:", { data, error });
+
+    if (error) {
+      alert("Error signing up: " + error.message);
+      console.error("Error signing up:", error)
+      // Handle the error (e.g., show an error message to the user)
+    }
+    else {
+      alert("Successfully signed up! Please sign in.");
+      console.log("Successfully signed up:", data)
+      // Handle successful sign-up (e.g., redirect the user)
+    }
 
   }
 

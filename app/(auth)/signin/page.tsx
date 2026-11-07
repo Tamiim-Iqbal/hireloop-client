@@ -6,17 +6,40 @@ import { Eye, EyeOff } from "lucide-react"
 import { FormEvent, useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { signIn } from "@/lib/auth-client"
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-    const formData = new FormData(event.currentTarget)
-    const data = Object.fromEntries(formData.entries())
+    const formData = new FormData(e.currentTarget)
+    const result = Object.fromEntries(formData.entries())
 
-    console.log("signin form data:", data)
+    console.log("signin form data:", result)
+
+    // signin 
+    const { data, error } = await signIn.email({
+    email: result.email as string,
+    password: result.password as string,
+    rememberMe: true, // If false, the user will be signed out when the browser is closed. (optional) (default: true)
+    callbackURL: "/", 
+    });
+
+    if (error) {
+        alert("Error signing in: " + error.message);
+      console.error("Error signing in:", error)
+      // Handle the error (e.g., show an error message to the user)
+    } else {
+       alert("Successfully signed in!");
+      console.log("Successfully signed in:", data)
+      // Handle successful sign-in (e.g., redirect the user)
+    }
+
+   console.log("signin result:", { data, error });
+
+
   }
 
   return (
