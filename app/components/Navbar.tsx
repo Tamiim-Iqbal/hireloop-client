@@ -132,7 +132,7 @@ export function Navbar() {
                   variant="ghost"
                   className="h-auto rounded-xl px-6 py-2 font-[family-name:var(--font-manrope)] text-lg leading-[1.45] font-semibold text-[#5c53fe] hover:bg-white/5 hover:text-[#7a73ff]"
                 >
-                  Sign In
+                  Sign In 
                 </Button>
 
                 <Button
