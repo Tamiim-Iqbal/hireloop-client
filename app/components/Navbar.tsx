@@ -8,13 +8,28 @@ import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useSession, signOut } from "@/lib/auth-client"
 
-const navigation = [
-  { label: "Browse Jobs", href: "#jobs" },
-  { label: "Company", href: "#company" },
-  { label: "Pricing", href: "#pricing" },
-]
+function NavigationLinks({
+  onNavigate,
+  session,
+}: {
+  onNavigate?: () => void
+  session: ReturnType<typeof useSession>["data"]
+}) {
+  const navigation = [
+    { label: "Home", href: "/" },
+    { label: "Browse Jobs", href: "/jobs" },
+    { label: "Company", href: "/company" },
+    { label: "Pricing", href: "/pricing" },
+    ...(session?.user
+      ? [
+          {
+            label: "Dashboard",
+            href: `/dashboard/${session.user.role}`,
+          },
+        ]
+      : []),
+  ]
 
-function NavigationLinks({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       {navigation.map((item) => (
@@ -47,7 +62,10 @@ export function Navbar() {
   // Close menu on outside click and Escape key
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
         closeMenu()
       }
     }
@@ -105,21 +123,24 @@ export function Navbar() {
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-6 lg:flex">
           <div className="flex items-center gap-10">
-            <NavigationLinks />
+            <NavigationLinks session={session} />
           </div>
 
-          <span className="h-6 w-px bg-[#a8a8a8]" aria-hidden="true" />
+          <span
+            className="h-6 w-px bg-[#a8a8a8]"
+            aria-hidden="true"
+          />
 
           <div className="flex items-center gap-4">
             {session?.user ? (
               <>
-              <span className="max-w-48 truncate px-3 font-[family-name:var(--font-manrope)] text-lg font-semibold text-white">
-                {session.user.name}
-              </span>
-              <Button
-                onClick={handleSignOut}
-                  nativeButton={false}
-                  className="cursor-pointer h-10 rounded-xl border border-[#090a15]/10 bg-[#5c53fe] px-[22.5px] font-[family-name:var(--font-instrument-sans)] text-lg leading-[1.45] font-medium text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
+                <span className="max-w-48 truncate px-3 font-[family-name:var(--font-manrope)] text-lg font-semibold text-white">
+                  {session.user.name}
+                </span>
+
+                <Button
+                  onClick={handleSignOut}
+                  className="h-10 cursor-pointer rounded-xl border border-[#090a15]/10 bg-[#5c53fe] px-[22.5px] font-[family-name:var(--font-instrument-sans)] text-lg leading-[1.45] font-medium text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
                 >
                   Sign Out
                 </Button>
@@ -132,7 +153,7 @@ export function Navbar() {
                   variant="ghost"
                   className="h-auto rounded-xl px-6 py-2 font-[family-name:var(--font-manrope)] text-lg leading-[1.45] font-semibold text-[#5c53fe] hover:bg-white/5 hover:text-[#7a73ff]"
                 >
-                  Sign In 
+                  Sign In
                 </Button>
 
                 <Button
@@ -169,20 +190,34 @@ export function Navbar() {
           <div className="flex flex-col gap-5">
             {/* Navigation Links */}
             <div className="flex flex-col gap-4">
-              <NavigationLinks onNavigate={closeMenu} />
+              <NavigationLinks
+                session={session}
+                onNavigate={closeMenu}
+              />
             </div>
 
             {/* Auth Buttons */}
             <div className="flex flex-col gap-3 border-t border-white/10 pt-5 sm:flex-row">
               {session?.user ? (
-                <span className="px-0 font-[family-name:var(--font-manrope)] text-lg font-semibold text-white">
-                  {session.user.name}
-                </span>
+                <>
+                  <span className="px-0 font-[family-name:var(--font-manrope)] text-lg font-semibold text-white">
+                    {session.user.name}
+                  </span>
+
+                  <Button
+                    onClick={handleSignOut}
+                    className="h-10 rounded-xl bg-[#5c53fe] px-6 font-medium text-white hover:bg-[#4f46f0]"
+                  >
+                    Sign Out
+                  </Button>
+                </>
               ) : (
                 <>
                   <Button
                     nativeButton={false}
-                    render={<Link href="/signin" onClick={closeMenu} />}
+                    render={
+                      <Link href="/signin" onClick={closeMenu} />
+                    }
                     variant="ghost"
                     className="h-10 justify-start rounded-xl px-0 font-[family-name:var(--font-manrope)] text-lg font-semibold text-[#5c53fe] hover:bg-white/5 hover:text-[#7a73ff] sm:justify-center sm:px-6"
                   >
@@ -191,7 +226,9 @@ export function Navbar() {
 
                   <Button
                     nativeButton={false}
-                    render={<Link href="/signup" onClick={closeMenu} />}
+                    render={
+                      <Link href="/signup" onClick={closeMenu} />
+                    }
                     className="h-10 rounded-xl bg-[#5c53fe] px-6 font-[family-name:var(--font-instrument-sans)] text-lg font-medium text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4f46f0]"
                   >
                     Get Started

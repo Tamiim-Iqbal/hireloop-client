@@ -25,6 +25,7 @@ import {
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { useSession } from "@/lib/auth-client"
+import Link from "next/link"
 
 type UserRole = "seeker" | "recruiter" | "admin"
 
@@ -101,7 +102,7 @@ const DashboardSidebar = () => {
           <SidebarMenu>
             {menuItemsByRole[role].map((item) => (
               <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton render={<a href={item.url} />}>
+                <SidebarMenuButton render={<Link href={item.url} />}>
                   <item.icon />
                   <span>{item.name}</span>
                 </SidebarMenuButton>
