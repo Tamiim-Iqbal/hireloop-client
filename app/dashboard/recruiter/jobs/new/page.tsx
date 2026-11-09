@@ -13,8 +13,9 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { createJob } from "@/lib/actions/jobs"
 
-type JobFormData = {
+export type JobFormData = {
   title: string
   companyName: string
   category: string
@@ -106,10 +107,14 @@ export default function NewJobForm() {
     setForm((current) => ({ ...current, [field]: value }))
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log("New job data:", form)
+    const jobData = {...form}
+    console.log("New job data:", jobData)
     setSubmitted(true)
+
+    const result = await createJob(jobData)
+    console.log("Job creation result:", result)
   }
 
   return (
